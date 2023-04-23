@@ -1,0 +1,25 @@
+{
+  "extends": [
+    // non-scoped
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    // scoped
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended"
+  ],
+  "plugins": [],
+  "parserOptions": {},
+  "env": { "browser": true },
+  "globals": {},
+  "rules": {
+    // "semi": ["error", "never"]
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  },
+  "settings": {
+    "react": {
+        "version": "detect"
+    }
+  }
+}
