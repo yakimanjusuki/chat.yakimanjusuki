@@ -1,0 +1,12 @@
+.PHONY:
+dev-start:
+	docker-compose -f compose-dev.yaml up -d
+
+dev-clean:
+	docker-compose -f compose-dev.yaml down --rmi local
+
+dev-backend-logs:
+	docker logs chat-backend -f
+
+dev-frontend-logs:
+	docker logs chat-frontend -f

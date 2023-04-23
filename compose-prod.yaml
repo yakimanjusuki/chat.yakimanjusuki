@@ -1,0 +1,15 @@
+version: "1.0"
+services:
+
+  backend:
+    build: 
+      context: "./"
+      dockerfile: "./containers/backend/dev/Dockerfile"
+    container_name: "chat-backend"
+    ports:
+      - 8080:8080
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./backend:/backend
+    working_dir: /backend
