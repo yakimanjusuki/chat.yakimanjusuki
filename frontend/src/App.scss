@@ -1,3 +1,443 @@
-h1 {
-  background-color: #ff0000;
+// ブレイクポイントを指定
+$tab: 820px;
+$sp: 520px;
+
+// color
+$borderColor: #a08c98; //ボーダーの色
+$headColor: #eae0da; //タイトル背景色
+$bodyColor: #d0c3c3; // 背景色
+$textColor: #333333; // 吹き出しの色
+$textBgColor: #eae0da; // 吹き出しの背景色
+
+// reset & base
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rounded Mplus 1c';
+  color: #333333;
+  font-size: 14px;
+  @media screen and (max-width: ($tab)) {
+    font-size: 12px;
+  }
+}
+
+img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.wrap-content {
+  padding: 0 30px;
+  background-image: url(http://localhost:3000/human.png);
+  background-color: rgba(255, 255, 255, 0.8);
+  background-size: 150px 150px;
+  background-blend-mode: lighten;
+  background-position: center;
+  @media screen and (max-width: ($tab)) {
+    background-size: 100px 100px;
+    padding: 0 20px;
+  }
+  @media screen and (max-width: ($sp)) {
+    padding: 0 10px;
+  }
+}
+
+.content {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  min-height: 100vh;
+  position: relative;
+}
+
+.box {
+  border: 3px solid $borderColor;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px auto;
+  max-width: 1024px;
+  &.close {
+    .character {
+      display: none;
+      padding: 0;
+    }
+    .talk {
+      display: none;
+      padding: 0;
+    }
+    .box_head {
+      cursor: pointer;
+      background: #ffffff;
+      transition: 0.5s;
+      span {
+        transition: 0.5s;
+        @media screen and (max-width: ($tab)) {
+          // font-size: 16px;
+          vertical-align: 1px;
+        }
+      }
+      &:hover {
+        background-color: #a08c98;
+        color: #ffffff;
+        span {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+  &_head {
+    background-color: $headColor;
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    @media screen and (max-width: ($tab)) {
+      font-size: 16px;
+    }
+    span {
+      transform: rotate(90deg);
+      display: inline-block;
+      vertical-align: 3px;
+      margin-right: 5px;
+    }
+  }
+  &_body {
+    background-color: $bodyColor;
+    padding: 20px;
+    @media screen and (max-width: ($sp)) {
+      padding: 5px;
+    }
+  }
+}
+
+.character {
+  &_list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    li {
+      width: 25%;
+      list-style: none;
+      cursor: pointer;
+      @media screen and (max-width: ($sp)) {
+        width: 50%;
+      }
+      img {
+        width: 100%;
+        transition: opacity 0.5s;
+        opacity: 0.5;
+        border-radius: 10px;
+      }
+      &:hover {
+        img {
+          opacity: 1;
+        }
+      }
+    }
+    li > div {
+      position: relative;
+      text-decoration: none;
+      // overflow: hidden;
+      margin: 10px;
+      @media screen and (max-width: ($tab)) {
+        margin: 5px;
+      }
+    }
+    .selected {
+      img {
+        opacity: 1;
+        border: solid 2px #a08c98;
+      }
+      label span {
+        font-weight: bold;
+      }
+    }
+    input {
+      display: none;
+    }
+    label {
+      cursor: pointer;
+      span {
+        text-align: center;
+        display: block;
+      }
+    }
+  }
+  &_input {
+    display: flex;
+    input {
+      resize: vertical;
+      width: calc(100% - 100px);
+      height: 50px;
+      padding: 10px;
+      border: solid 2px $borderColor;
+      border-radius: 10px;
+      text-decoration: none;
+      @media screen and (max-width: ($tab)) {
+        width: calc(100% - 45px);
+        height: 40px;
+      }
+    }
+    button {
+      width: 90px;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: solid 2px $borderColor;
+      transition: 0.5s;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 3px 0;
+      letter-spacing: 5px;
+      &:hover {
+        background-color: $borderColor;
+        color: #ffffff;
+      }
+      @media screen and (max-width: ($tab)) {
+        width: 40px;
+        letter-spacing: 2px;
+        margin-left: 5px;
+      }
+    }
+  }
+  .manual {
+    margin-top: 20px;
+    display: flex;
+    @media screen and (max-width: ($sp)) {
+      margin-top: 10px;
+    }
+    &_icon {
+      max-width: 50px;
+      min-width: 50px;
+      img {
+        border-radius: 50%;
+      }
+      text-align: center;
+      span {
+        font-size: 10px;
+        display: block;
+      }
+    }
+    &_fukidashi {
+      align-self: flex-start;
+      color: red;
+      margin-left: 25px;
+      filter: drop-shadow(3px 3px 5px rgba($color: #000000, $alpha: 0.3));
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      position: relative;
+      display: inline-block;
+      color: $textColor;
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 20px;
+      @media screen and (max-width: ($sp)) {
+        margin-left: 10px;
+      }
+      &::before {
+        clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+        left: -15px;
+        content: '';
+        display: block;
+        width: 20px;
+        height: 15px;
+        background-color: #ffffff;
+        position: absolute;
+        top: 10px;
+      }
+      li {
+        list-style: none;
+      }
+    }
+  }
+  .delete {
+    position: absolute;
+    z-index: 10;
+    letter-spacing: 3px;
+    padding: 0 5px 0 20px;
+    font-size: 12px;
+    bottom: 16%;
+    right: 15px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: solid 1px #333333;
+    cursor: pointer;
+    color: #333333;
+    transition: 0.5s;
+    @media screen and (max-width: ($tab)) {
+      bottom: none;
+      right: 20px;
+      left: 20px;
+      font-size: 10px;
+      padding-left: 18px;
+    }
+    span {
+      font-size: 10px;
+      line-height: 1;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      transform: rotate(90deg);
+      @media screen and (max-width: ($tab)) {
+        top: 4px;
+        transform: scale(0.8) rotate(90deg);
+      }
+    }
+    &:hover {
+      background-color: #333333;
+      color: #ffffff;
+      font-weight: 600;
+      span {
+        color: #ffffff;
+      }
+    }
+  }
+  .make {
+    background-color: #eae0da;
+    padding: 30px 40px;
+    border-radius: 20px;
+    margin: 10px;
+    @media screen and (max-width: ($tab)) {
+      padding: 20px;
+    }
+    @media screen and (max-width: ($tab)) {
+      padding: 10px;
+      margin: 5px;
+    }
+  }
+}
+
+.talk {
+  &_message {
+    margin-bottom: 30px;
+  }
+  &_icon {
+    max-width: 50px;
+    min-width: 50px;
+    img {
+      border-radius: 50%;
+    }
+    text-align: center;
+    span {
+      font-size: 10px;
+      display: block;
+    }
+  }
+  &_fukidashi {
+    display: flex;
+    & + & {
+      margin-top: 30px;
+    }
+    &-left {
+      p {
+        margin-left: 25px;
+        &::before {
+          clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+          left: -15px;
+        }
+      }
+    }
+    &-right {
+      flex-direction: row-reverse;
+      p {
+        margin-right: 25px;
+        &::before {
+          clip-path: polygon(0% 0%, 0% 100%, 100% 50%);
+          right: -15px;
+        }
+      }
+    }
+  }
+  &_text {
+    max-width: 75%;
+    filter: drop-shadow(3px 3px 5px rgba($color: #000000, $alpha: 0.3));
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    p {
+      position: relative;
+      display: inline-block;
+      color: $textColor;
+      background-color: $textBgColor;
+      padding: 10px;
+      border-radius: 20px;
+      & + p {
+        margin-top: 15px;
+        &::before {
+          content: none;
+        }
+      }
+      &::before {
+        content: '';
+        display: block;
+        width: 20px;
+        height: 15px;
+        background-color: $textBgColor;
+        position: absolute;
+        top: 10px;
+      }
+    }
+  }
+  &_input {
+    input {
+      resize: vertical;
+      width: calc(100% - 100px);
+      height: 50px;
+      padding: 10px;
+      border: solid 2px $borderColor;
+      border-radius: 10px;
+      text-decoration: none;
+      @media screen and (max-width: ($tab)) {
+        width: calc(100% - 42px);
+        height: 40px;
+      }
+    }
+    button {
+      width: 90px;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: solid 2px $borderColor;
+      transition: 0.5s;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 5px;
+      height: 50px;
+      @media screen and (max-width: ($tab)) {
+        height: 40px;
+        width: 40px;
+        letter-spacing: 2px;
+        margin-left: 2px;
+      }
+      &:hover {
+        background-color: $borderColor;
+        color: #ffffff;
+      }
+    }
+  }
+  .loder {
+    animation-name: smooth-fadein-out;
+    animation-duration: 1.5s;
+    animation-timing-function: ease;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    @keyframes smooth-fadein-out {
+      0% {
+        opacity: 0.2;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+  .error {
+    color: #ba4b4bc7;
+  }
+  .overLimit {
+    color: #ba4b4bc7;
+  }
 }
