@@ -37,3 +37,8 @@ $ make dev-frontend-logs
 
 ## その他
 - 今後の課題等は、『 [GitHubのissue](https://github.com/yakimanjusuki/chat.yakimanjusuki/issues) 』へ記載してます。
+- ポートフォリオを公開しているURLは、以下となります。
+  - ChatGPTを使用したChatのWebアプリ（これです・・・）: https://chat.yakimanjusuki.love
+  - 自己紹介ページ: https://yakimanjusuki.love
+
+※ 状況により、Basic認証を設定させていただく場合がございます。
