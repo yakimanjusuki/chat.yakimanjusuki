@@ -1,7 +1,9 @@
 import { useCallback, useState, useReducer } from 'react'
 import axios from 'axios'
+import { ADD_CHARACTER, DELETE_CHARACTER, SELECT_CHARACTER, ADD_MESSAGE } from '../utils/constants'
 import { v4 as uuidv4 } from 'uuid'
-import type { CharacterType, ManualModeItemType, ManualModeType } from './AppType'
+import type { CharacterActionType, CharacterType } from '../components/character/CharacterType'
+import type { ManualModeItemType, ManualModeType } from '../components/talk/TalkType'
 
 const defaultCharacter = {
   id: '',
@@ -74,36 +76,54 @@ const manualModeList: ManualModeType[] = [
   }
 ]
 
-export const useCharacter = () => {
-  const [inputCharacter, setInputCharacter] = useState('')
-  const [characters, setCharacters] = useState<CharacterType[]>(characterList)
-  const [manualModes, setManualModes] = useState(manualModeList)
-
-  const addCharacter = useCallback(
-    (name: string, img: string) => {
-      setCharacters((characters) => [
+const reducer = (characters: CharacterType[], action: CharacterActionType): CharacterType[] => {
+  switch (action.type) {
+    case ADD_CHARACTER:
+      return [
         ...characters,
         {
           ...defaultCharacter,
-          name,
-          img,
-          role: `あなたの名前は「${name}」」で、役割は「${inputCharacter}」です。`,
-          messages: [{ speakerId: 0, text: `こんにちわ！「${name}」です。（ChatGPTを使用しています）` }]
+          name: action.name,
+          img: action.img,
+          role: `あなたの名前は「${action.name}」」で、役割は「${action.inputCharacter}」です。`,
+          messages: [{ speakerId: 0, text: `こんにちわ！「${action.name}」です。（ChatGPTを使用しています）` }]
         }
-      ])
-    },
-    [setCharacters, inputCharacter]
-  )
+      ]
+    case DELETE_CHARACTER: {
+      if (characters.filter((character) => character.id === action.id)[0].selected) return characters
+      const tCharacters = characters.filter((character) => character.id !== action.id)
+      return tCharacters
+    }
+    case SELECT_CHARACTER: {
+      const newCharacter = [...characters].map((character) => {
+        if (character.id === action.id) {
+          character.selected = true
+          return character
+        } else {
+          character.selected = false
+          return character
+        }
+      })
+      return newCharacter
+    }
+    case ADD_MESSAGE: {
+      const newCharacter = characters.map((character) => {
+        const message = {
+          speakerId: action.speakerId,
+          text: action.text
+        }
+        return character.selected ? { ...character, messages: [...character.messages, message] } : { ...character }
+      })
+      return newCharacter
+    }
+    default:
+      return characters
+  }
+}
 
-  const deleteCharacter = useCallback(
-    (id: string) => {
-      if (characters.filter((character) => character.id === id)[0].selected) return
-      const tCharacters = characters.filter((character) => character.id !== id)
-      return setCharacters(tCharacters)
-    },
-    [characters]
-  )
-
+export const useCharacter = () => {
+  const [manualModes, setManualModes] = useState(manualModeList)
+  const [characters, dispatch] = useReducer(reducer, characterList)
   const isLoaderManualMode = useCallback((): boolean => {
     const [manual] = manualModes.filter((manual) => manual.mode === 'loader')
     return manual.selected
@@ -125,7 +145,11 @@ export const useCharacter = () => {
   )
 
   const characterSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (
+      e: React.FormEvent<HTMLFormElement>,
+      inputCharacter: string,
+      setInputCharacter: React.Dispatch<React.SetStateAction<string>>
+    ) => {
       e.preventDefault()
       let tManualModes: ManualModeType[] = []
       if (!inputCharacter.trim()) return
@@ -140,7 +164,13 @@ export const useCharacter = () => {
       axios
         .post('https://chat.yakimanjusuki.love/api/character', { text: inputCharacter })
         .then((response) => {
-          addCharacter(response.data.name, response.data.img)
+          dispatch({
+            type: 'ADD_CHARACTER',
+            name: response.data.name,
+            img: response.data.img,
+            id: uuidv4(),
+            inputCharacter
+          })
           tManualModes = setrManualMode('loader', false, tManualModes)
           setManualModes(tManualModes)
         })
@@ -152,24 +182,13 @@ export const useCharacter = () => {
         })
       setInputCharacter('')
     },
-    [addCharacter, inputCharacter, manualModes, setManualModes, isLoaderManualMode, characters.length, setrManualMode]
+    [manualModes, setManualModes, isLoaderManualMode, characters.length, setrManualMode]
   )
 
-  const selecteCharacter = (e: any) => {
-    const newCharacter = [...characters]
-    newCharacter.map((item) => (item.selected = false))
-    newCharacter[e.target.id].selected = !newCharacter[e.target.id].selected
-    setCharacters(newCharacter)
-  }
-
   return {
-    inputCharacter,
-    setInputCharacter,
-    characters,
     characterSubmit,
-    setCharacters,
-    selecteCharacter,
     manualModes,
-    deleteCharacter
+    characters,
+    dispatch
   }
 }

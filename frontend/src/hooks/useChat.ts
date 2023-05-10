@@ -1,11 +1,8 @@
 import { useCallback, useState } from 'react'
 import axios from 'axios'
-import type { CharacterType } from './AppType'
+import type { CharacterType, CharacterActionType } from '../components/character/CharacterType'
 
-export const useChat = (
-  characters: CharacterType[],
-  setCharacters: React.Dispatch<React.SetStateAction<CharacterType[]>>
-) => {
+export const useChat = (characters: CharacterType[], dispatch: React.Dispatch<CharacterActionType>) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [inputText, setInputText] = useState('')
   const addMessage = useCallback(
@@ -20,29 +17,28 @@ export const useChat = (
   )
 
   const chatSubmit = useCallback(
-    (e: any) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       if (!inputText.trim()) return
       if (isSubmitting) return
       setIsSubmitting(true)
-      const tCharacters = addMessage(1, inputText)
-      setCharacters(tCharacters)
+      dispatch({ type: 'ADD_MESSAGE', speakerId: 1, text: inputText })
       const [character] = characters.filter((character) => character.selected)
       axios
         .post('https://chat.yakimanjusuki.love/api/chat', { text: inputText, role: character.role })
         .then((response) => {
-          setCharacters(addMessage(0, response.data.text, tCharacters))
+          dispatch({ type: 'ADD_MESSAGE', speakerId: 0, text: response.data.text })
         })
         .catch((e) => {
           console.log(e)
-          setCharacters(addMessage(0, 'データが取得できません。', tCharacters))
+          dispatch({ type: 'ADD_MESSAGE', speakerId: 0, text: 'データが取得できません。' })
         })
         .finally(() => {
           setIsSubmitting(false)
         })
       setInputText('')
     },
-    [addMessage, inputText, isSubmitting, setInputText, setCharacters, characters]
+    [addMessage, inputText, isSubmitting, setInputText, characters]
   )
 
   return { inputText, setInputText, chatSubmit, isSubmitting }
