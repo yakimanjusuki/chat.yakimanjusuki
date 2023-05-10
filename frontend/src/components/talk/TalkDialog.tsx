@@ -1,8 +1,8 @@
-import { TalkDialogProps } from '../../AppType'
+import { TalkDialogPropsType } from './TalkType'
 
 const userImg = '/human.png'
 
-export const TalkDialog = (props: TalkDialogProps) => {
+export const TalkDialog = (props: TalkDialogPropsType) => {
   const { character } = props
   return (
     <>

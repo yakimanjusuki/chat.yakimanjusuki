@@ -1,6 +1,6 @@
-import type { TalkInputProps } from '../../AppType'
+import type { TalkInputPropsType } from './TalkType'
 
-export const TalkInput = (props: TalkInputProps) => {
+export const TalkInput = (props: TalkInputPropsType) => {
   const { isSubmitting, selectedCharacter, chatSubmit, inputText, setInputText } = props
   return (
     <>

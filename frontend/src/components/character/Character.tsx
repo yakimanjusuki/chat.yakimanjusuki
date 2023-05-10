@@ -1,4 +1,4 @@
-import { CharacterPropsType } from '../../AppType'
+import { CharacterPropsType } from './CharacterType'
 import { CharacterList } from './CharacterList'
 import { CharacterMaking } from './CharacterMaking'
 

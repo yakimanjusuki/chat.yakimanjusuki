@@ -1,11 +1,13 @@
-import type { CharacterMakingProps } from '../../AppType'
+import { useState } from 'react'
+import type { CharacterMakingPropsType } from './CharacterType'
 
-export const CharacterMaking = (props: CharacterMakingProps) => {
-  const { characterSubmit, inputCharacter, setInputCharacter, manualModes } = props
+export const CharacterMaking = (props: CharacterMakingPropsType) => {
+  const { characterSubmit, manualModes } = props
+  const [inputCharacter, setInputCharacter] = useState('')
   return (
     <>
       <div className="make">
-        <form className="character_input" onSubmit={characterSubmit}>
+        <form className="character_input" onSubmit={(e) => characterSubmit(e, inputCharacter, setInputCharacter)}>
           <input
             value={inputCharacter}
             placeholder="『かわいい猫』等を入力。(10文字以内)"

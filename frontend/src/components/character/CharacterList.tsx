@@ -1,20 +1,12 @@
-import type { CharacterListProps } from '../../AppType'
+import type { CharacterListPropsType } from './CharacterType'
 import { CharacterItem } from './CharacterItem'
 
-export const CharacterList = (props: CharacterListProps) => {
-  const { characters, selecteCharacter, deleteCharacter } = props
+export const CharacterList = (props: CharacterListPropsType) => {
+  const { characters, dispatch } = props
   return (
     <ul className="character_list">
       {characters.map((character, index) => {
-        return (
-          <CharacterItem
-            character={character}
-            index={index}
-            selecteCharacter={selecteCharacter}
-            deleteCharacter={deleteCharacter}
-            key={character.id}
-          />
-        )
+        return <CharacterItem character={character} index={index} dispatch={dispatch} key={character.id} />
       })}
     </ul>
   )
